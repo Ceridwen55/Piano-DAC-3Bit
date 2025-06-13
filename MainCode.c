@@ -56,7 +56,6 @@ Here are the plot for this little project:
 
 const uint8_t SineWave[16] = {4,5,6,7,7,7,6,5,4,3,2,1,1,1,2,3}; //to match a sinewave form
 uint8_t Index = 0; // for indexing the wave sample
-uint8_t WaveOn = 0; // flag for turning on the sound in Systick Handler
 
 
 //**FUNCTIONS**//
@@ -111,15 +110,13 @@ void DAC_Funct(uint8_t value)
 void SysTick_Handler(void)
 {
 
-	if((GPIO_PORTC_DATA_R & 0xF0) != 0xF0)
+	if((GPIO_PORTC_DATA_R & 0xF0) != 0xF0) // Because of pull up ( 1 when not pressed, 0 when pressed) we can utilize this as a trigger so the wave on is on
 	{
-	WaveOn = 1;
 	Index = (Index + 1 )& 0x0F;
 	DAC_Funct(SineWave[Index]);
 	}
 	else
 	{
-		WaveOn = 0 ;
 		DAC_Funct(0);
 	}
 }
@@ -128,19 +125,19 @@ void GPIOC_Handler (void)
 {
 	if(GPIO_PORTC_RIS_R & 0x10) //If PC4 is true / active / pressed
 	{
-		WaveOn = 1;
+		
 		NVIC_STRELOAD_R = 3822- 1; // Putting 261.63 Hz to play or DO (16 * 261.63  = 4186.08 Hz. 16 Mhz / 4186.08 Hz = 3822.19
 	}
 	
 	else if(GPIO_PORTC_RIS_R & 0x20) //If PC5 is true / active / pressed
 	{
-		WaveOn = 1; //Notify the flag
+		
 		NVIC_STRELOAD_R =  3405 - 1; // Putting 293.66 Hz to play or RE ( 16 * 293.66 = 4698.56 Hz . 16 Mhz / 4698.56 Hz  =  3,405.29 
 	}
 	
 	else if(GPIO_PORTC_RIS_R & 0x80) //If PC6 is true / active / pressed
 	{
-		WaveOn = 1; //Notify the flag
+		
 		NVIC_STRELOAD_R = 3034 - 1; // Putting 329.63 Hz to play or MI (16 * 329.64  = 5274.08 Hz. 16 Mhz / 5274.08 Hz = 3,033.70
 	}
 	
