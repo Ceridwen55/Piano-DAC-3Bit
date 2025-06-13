@@ -125,45 +125,22 @@ void GPIOC_Handler (void)
 	if(GPIO_PORTC_RIS_R & 0x10) //If PC4 is true / active / pressed
 	{
 		WaveOn = 1; //Notify the flag
-		NVIC_STRELOAD_R = //(FILL WAVE) - 1; // Putting xxxx Hz to play
+		NVIC_STRELOAD_R = 3822- 1; // Putting 261.63 Hz to play or DO (16 * 261.63  = 4186.08 Hz. 16 Mhz / 4186.08 Hz = 3822.19
 	}
 	
 	else if(GPIO_PORTC_RIS_R & 0x20) //If PC4 is true / active / pressed
 	{
 		WaveOn = 1; //Notify the flag
-		NVIC_STRELOAD_R = //(FILL WAVE) - 1; // Putting xxxx Hz to play
+		NVIC_STRELOAD_R =  3405 - 1; // Putting 293.66 Hz to play or RE ( 16 * 293.66 = 4698.56 Hz . 16 Mhz / 4698.56 Hz  =  3,405.29 
 	}
 	
 	else if(GPIO_PORTC_RIS_R & 0x40) //If PC4 is true / active / pressed
 	{
 		WaveOn = 1; //Notify the flag
-		NVIC_STRELOAD_R = //(FILL WAVE) - 1; // Putting xxxx Hz to play
+		NVIC_STRELOAD_R = 3034 - 1; // Putting 329.63 Hz to play or MI (16 * 329.64  = 5274.08 Hz. 16 Mhz / 5274.08 Hz = 3,033.70
 	}
 	
-	else if(GPIO_PORTC_RIS_R & 0x30) //If PC4 is true / active / pressed
-	{
-		WaveOn = 1; //Notify the flag
-		NVIC_STRELOAD_R = //(FILL WAVE) - 1; // Putting xxxx Hz to play
-	}
-	
-	else if(GPIO_PORTC_RIS_R & 0x50) //If PC4 is true / active / pressed
-	{
-		WaveOn = 1; //Notify the flag
-		NVIC_STRELOAD_R = //(FILL WAVE) - 1; // Putting xxxx Hz to play
-	}
-	
-	else if(GPIO_PORTC_RIS_R & 0x60) //If PC4 is true / active / pressed
-	{
-		WaveOn = 1; //Notify the flag
-		NVIC_STRELOAD_R = //(FILL WAVE) - 1; // Putting xxxx Hz to play
-	}
-	
-	else if(GPIO_PORTC_RIS_R & 0x70) //If PC4 is true / active / pressed
-	{
-		WaveOn = 1; //Notify the flag
-		NVIC_STRELOAD_R = //(FILL WAVE) - 1; // Putting xxxx Hz to play
-	}
-	
+
 	GPIO_PORTC_ICR_R = 0x70; // clear interrupt
 }
 
