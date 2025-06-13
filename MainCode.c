@@ -8,7 +8,7 @@ Using previous setup of 3 Bit DAC Lab, I'm going to make a simple piano with 3 b
 
 Here are the plot for this little project:
 1. Using PK1,PK2,PK3 as the output for the 3 Bit DAC like the previous lab
-2. Using PC4,PC5, PC6 as the input for the 3 buttons ( will be set using edge interrupts)
+2. Using PC4,PC5, PC7 as the input for the 3 buttons ( will be set using edge interrupts)
 3. SysTick will work like usual, if the button is not pressed, SysTick load value will be 0
 4. In GPIO C Handler, create 3 possibilities ( if button PC4, or PC 5, or PC 6 or both of those three pressed, create a special Hz )
 
@@ -80,14 +80,14 @@ void GPIO_K_Init(void)
 void GPIO_C_Init(void)
 {
 	SYSCTL_RCGCGPIO_R |= 0x04; //turning on Clock for port C without disturbing other bits
-	GPIO_PORTC_DEN_R = 0x70; //0111 0000,PC4-6 digital enable
-	GPIO_PORTC_DIR_R &= ~0x70; //1000 1111, PC4-6 Input
-	GPIO_PORTC_PUR_R |= 0x70; // 0111 0000 , PC4-6 pull up enable
-	GPIO_PORTC_IS_R &= ~0x70; //1000 1111
-	GPIO_PORTC_IBE_R &= ~0x70;
-	GPIO_PORTC_IEV_R &= ~0x70;
-	GPIO_PORTC_ICR_R = 0x70;
-	GPIO_PORTC_IM_R |= 0x70;
+	GPIO_PORTC_DEN_R = 0xF0; //0111 0000,PC4-6 digital enable
+	GPIO_PORTC_DIR_R &= ~0xF0; //1000 1111, PC4-6 Input
+	GPIO_PORTC_PUR_R |= 0xF0; // 0111 0000 , PC4-6 pull up enable
+	GPIO_PORTC_IS_R &= ~0xF0; //1000 1111
+	GPIO_PORTC_IBE_R &= ~0xF0;
+	GPIO_PORTC_IEV_R &= ~0xF0;
+	GPIO_PORTC_ICR_R = 0xF0;
+	GPIO_PORTC_IM_R |= 0xF0;
 	
 	NVIC_PRI0_R = (NVIC_PRI0_R & 0xFF1FFFFF) | 0x00200000; //Priority 1
 	NVIC_EN0_R = 0x04; //bit 2 cause interrupt 2
@@ -96,7 +96,7 @@ void GPIO_C_Init(void)
 void Systick_Init(void)
 {	
 	NVIC_STCTRL_R = 0;
-	NVIC_STRELOAD_R = 10000-1; //1600 Hz, with 16Mhz base frequency
+	//NVIC_STRELOAD_R = 10000-1; //1600 Hz, with 16Mhz base frequency
 	NVIC_STCURRENT_R = 0;
 	NVIC_SYS_PRI3_R = (NVIC_SYS_PRI3_R & 0x00FFFFFF) | 0x60000000; //Priority 3
 	NVIC_STCTRL_R = 0x07; // enable bit 0-2
@@ -110,12 +110,16 @@ void DAC_Funct(uint8_t value)
 
 void SysTick_Handler(void)
 {
-	if(WaveOn){
+
+	if((GPIO_PORTC_DATA_R & 0xF0) != 0xF0)
+	{
+	WaveOn = 1;
 	Index = (Index + 1 )& 0x0F;
 	DAC_Funct(SineWave[Index]);
 	}
 	else
 	{
+		WaveOn = 0 ;
 		DAC_Funct(0);
 	}
 }
@@ -124,29 +128,29 @@ void GPIOC_Handler (void)
 {
 	if(GPIO_PORTC_RIS_R & 0x10) //If PC4 is true / active / pressed
 	{
-		WaveOn = 1; //Notify the flag
+		WaveOn = 1;
 		NVIC_STRELOAD_R = 3822- 1; // Putting 261.63 Hz to play or DO (16 * 261.63  = 4186.08 Hz. 16 Mhz / 4186.08 Hz = 3822.19
 	}
 	
-	else if(GPIO_PORTC_RIS_R & 0x20) //If PC4 is true / active / pressed
+	else if(GPIO_PORTC_RIS_R & 0x20) //If PC5 is true / active / pressed
 	{
 		WaveOn = 1; //Notify the flag
 		NVIC_STRELOAD_R =  3405 - 1; // Putting 293.66 Hz to play or RE ( 16 * 293.66 = 4698.56 Hz . 16 Mhz / 4698.56 Hz  =  3,405.29 
 	}
 	
-	else if(GPIO_PORTC_RIS_R & 0x40) //If PC4 is true / active / pressed
+	else if(GPIO_PORTC_RIS_R & 0x80) //If PC6 is true / active / pressed
 	{
 		WaveOn = 1; //Notify the flag
 		NVIC_STRELOAD_R = 3034 - 1; // Putting 329.63 Hz to play or MI (16 * 329.64  = 5274.08 Hz. 16 Mhz / 5274.08 Hz = 3,033.70
 	}
 	
-
 	GPIO_PORTC_ICR_R = 0x70; // clear interrupt
 }
 
 int main (void)
 {
 	GPIO_K_Init();
+	GPIO_C_Init();
 	Systick_Init();
 	EnableInterrupts();
 	while (1)
