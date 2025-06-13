@@ -110,19 +110,67 @@ void DAC_Funct(uint8_t value)
 
 void SysTick_Handler(void)
 {
+	if(WaveOn){
 	Index = (Index + 1 )& 0x0F;
 	DAC_Funct(SineWave[Index]);
+	}
+	else
+	{
+		DAC_Funct(0);
+	}
 }
 
 void GPIOC_Handler (void)
 {
+	if(GPIO_PORTC_RIS_R & 0x10) //If PC4 is true / active / pressed
+	{
+		WaveOn = 1; //Notify the flag
+		NVIC_STRELOAD_R = //(FILL WAVE) - 1; // Putting xxxx Hz to play
+	}
 	
+	else if(GPIO_PORTC_RIS_R & 0x20) //If PC4 is true / active / pressed
+	{
+		WaveOn = 1; //Notify the flag
+		NVIC_STRELOAD_R = //(FILL WAVE) - 1; // Putting xxxx Hz to play
+	}
+	
+	else if(GPIO_PORTC_RIS_R & 0x40) //If PC4 is true / active / pressed
+	{
+		WaveOn = 1; //Notify the flag
+		NVIC_STRELOAD_R = //(FILL WAVE) - 1; // Putting xxxx Hz to play
+	}
+	
+	else if(GPIO_PORTC_RIS_R & 0x30) //If PC4 is true / active / pressed
+	{
+		WaveOn = 1; //Notify the flag
+		NVIC_STRELOAD_R = //(FILL WAVE) - 1; // Putting xxxx Hz to play
+	}
+	
+	else if(GPIO_PORTC_RIS_R & 0x50) //If PC4 is true / active / pressed
+	{
+		WaveOn = 1; //Notify the flag
+		NVIC_STRELOAD_R = //(FILL WAVE) - 1; // Putting xxxx Hz to play
+	}
+	
+	else if(GPIO_PORTC_RIS_R & 0x60) //If PC4 is true / active / pressed
+	{
+		WaveOn = 1; //Notify the flag
+		NVIC_STRELOAD_R = //(FILL WAVE) - 1; // Putting xxxx Hz to play
+	}
+	
+	else if(GPIO_PORTC_RIS_R & 0x70) //If PC4 is true / active / pressed
+	{
+		WaveOn = 1; //Notify the flag
+		NVIC_STRELOAD_R = //(FILL WAVE) - 1; // Putting xxxx Hz to play
+	}
+	
+	GPIO_PORTC_ICR_R = 0x70; // clear interrupt
 }
 
 int main (void)
 {
 	GPIO_K_Init();
-	Systick_Init(0);
+	Systick_Init();
 	EnableInterrupts();
 	while (1)
 	{
