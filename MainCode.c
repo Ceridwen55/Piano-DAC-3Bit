@@ -79,14 +79,26 @@ void GPIO_K_Init(void)
 
 void GPIO_C_Init(void)
 {
+	SYSCTL_RCGCGPIO_R |= 0x04; //turning on Clock for port C without disturbing other bits
+	GPIO_PORTC_DEN_R = 0x70; //0111 0000,PC4-6 digital enable
+	GPIO_PORTC_DIR_R &= ~0x70; //1000 1111, PC4-6 Input
+	GPIO_PORTC_PUR_R |= 0x70; // 0111 0000 , PC4-6 pull up enable
+	GPIO_PORTC_IS_R &= ~0x70; //1000 1111
+	GPIO_PORTC_IBE_R &= ~0x70;
+	GPIO_PORTC_IEV_R &= ~0x70;
+	GPIO_PORTC_ICR_R = 0x70;
+	GPIO_PORTC_IM_R |= 0x70;
 	
+	NVIC_PRI0_R = (NVIC_PRI0_R & 0xFF1FFFFF) | 0x00200000; //Priority 1
+	NVIC_EN0_R = 0x04; //bit 2 cause interrupt 2
 }
 
-void Systick_Init(uint32_t load)
-{
+void Systick_Init(void)
+{	
 	NVIC_STCTRL_R = 0;
-	NVIC_STRELOAD_R = load-1; //1600 Hz, with 16Mhz base frequency
+	NVIC_STRELOAD_R = 10000-1; //1600 Hz, with 16Mhz base frequency
 	NVIC_STCURRENT_R = 0;
+	NVIC_SYS_PRI3_R = (NVIC_SYS_PRI3_R & 0x00FFFFFF) | 0x60000000; //Priority 3
 	NVIC_STCTRL_R = 0x07; // enable bit 0-2
 }
 
@@ -102,10 +114,15 @@ void SysTick_Handler(void)
 	DAC_Funct(SineWave[Index]);
 }
 
+void GPIOC_Handler (void)
+{
+	
+}
+
 int main (void)
 {
 	GPIO_K_Init();
-	Systick_Init();
+	Systick_Init(0);
 	EnableInterrupts();
 	while (1)
 	{
