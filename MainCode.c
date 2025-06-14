@@ -110,7 +110,7 @@ void DAC_Funct(uint8_t value)
 void SysTick_Handler(void)
 {
 
-	if((GPIO_PORTC_DATA_R & 0xF0) != 0xF0) // Because of pull up ( 1 when not pressed, 0 when pressed) we can utilize this as a trigger so the wave on is on
+	if((GPIO_PORTC_DATA_R & 0xF0) != 0xF0) // Because of pull up ( 1 when not pressed, 0 when pressed) we can utilize this as a trigger so the wave is on
 	{
 	Index = (Index + 1 )& 0x0F;
 	DAC_Funct(SineWave[Index]);
@@ -127,21 +127,24 @@ void GPIOC_Handler (void)
 	{
 		
 		NVIC_STRELOAD_R = 3822- 1; // Putting 261.63 Hz to play or DO (16 * 261.63  = 4186.08 Hz. 16 Mhz / 4186.08 Hz = 3822.19
+		
 	}
 	
 	else if(GPIO_PORTC_RIS_R & 0x20) //If PC5 is true / active / pressed
 	{
 		
 		NVIC_STRELOAD_R =  3405 - 1; // Putting 293.66 Hz to play or RE ( 16 * 293.66 = 4698.56 Hz . 16 Mhz / 4698.56 Hz  =  3,405.29 
+	
 	}
 	
 	else if(GPIO_PORTC_RIS_R & 0x80) //If PC6 is true / active / pressed
 	{
 		
-		NVIC_STRELOAD_R = 3034 - 1; // Putting 329.63 Hz to play or MI (16 * 329.64  = 5274.08 Hz. 16 Mhz / 5274.08 Hz = 3,033.70
+		NVIC_STRELOAD_R = 3033 - 1; // Putting 329.63 Hz to play or MI (16 * 329.64  = 5274.08 Hz. 16 Mhz / 5274.08 Hz = 3,033.70
+		
 	}
 	
-	GPIO_PORTC_ICR_R = 0x70; // clear interrupt
+	GPIO_PORTC_ICR_R = 0xF0; // clear interrupt
 }
 
 int main (void)
