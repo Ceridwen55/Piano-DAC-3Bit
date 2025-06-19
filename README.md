@@ -1,4 +1,4 @@
-🎹 A Simple 3-Note Piano Project
+# 🎹 A Simple 3-Note Piano Project
 This is a simple project built to reinforce my learning of embedded systems concepts like SysTick and Edge Interrupts. The goal is to use a TM4C1294XL microcontroller to generate analog audio signals (tones) from digital values, allowing it to produce three musical notes: Do, Re, and Mi.
 
 #Features
