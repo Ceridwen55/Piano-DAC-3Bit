@@ -12,7 +12,7 @@ Connects to a standard 3.5mm audio jack, compatible with various speakers or hea
 
 Built on the TM4C1294XL microcontroller (Texas Instruments).
 
-#Bill of Materials (BOM)
+# Bill of Materials (BOM)
 1 × TM4C1294XL microcontroller
 
 3 × Push buttons
