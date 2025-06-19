@@ -1,31 +1,55 @@
-#A Simple 3-Notes Piano Project
-
-This is a project that I've created to learn and use what I did learn before. Implementing Systick and Edge Interrupt to generate analog signal from digital value.
-I'm using Systick and Edge Interrupt as a catalyst to make the MCU ( TM4C1294XL) generates some certain frequencies that we can hear, in this case Do, Re, and Mi notes.
+🎹 A Simple 3-Note Piano Project
+This is a simple project built to reinforce my learning of embedded systems concepts like SysTick and Edge Interrupts. The goal is to use a TM4C1294XL microcontroller to generate analog audio signals (tones) from digital values, allowing it to produce three musical notes: Do, Re, and Mi.
 
 #Features
-- As per button can generate a certain frequency when pushed based on the original MCU frequency ( 16 MHz )
-- Systick used to help maintain the frequency that the button generates
-- Connected to audio jack female 3,5 mm so you can hear the sound with a lot of speaker varieties
+Generates a specific frequency (Do, Re, Mi) when each button is pressed.
 
-#BOM
-- 3 buttons
-- Some jumpers to connect the GPIO to the breadboard ( you can design PCB if you wanted )
-- 5 30k Ohm resistors
-- 2 15k Ohm resistors
-- 1 3,5mm female audio jack
-- 1 TM4C1294XL from Texas Instrument
+Uses SysTick to maintain accurate timing for signal generation.
 
-#How To use
-- This code at MainCode.c is only compatible with TM4C1294XL
-- You can change the frequency that the MCU generates at the GPIO Handler ( I wrote the formula there so do as you wish )
-- Build the project
-- Upload the code to your MCU ( here I'm using Keil Microvision)
-- Build the circuit as per this example : 
-![image](https://github.com/user-attachments/assets/ae1647bb-424b-4dbc-8340-e21e24d48c0f)
-notes: Its only the example especially only the DAC part, you have to make sure it matches your design of GPIO for your buttons and DAC
-- A simple piano is done
+Utilizes Edge Interrupts to detect button presses.
+
+Connects to a standard 3.5mm audio jack, compatible with various speakers or headphones.
+
+Built on the TM4C1294XL microcontroller (Texas Instruments).
+
+#Bill of Materials (BOM)
+1 × TM4C1294XL microcontroller
+
+3 × Push buttons
+
+5 × 30kΩ resistors
+
+2 × 15kΩ resistors
+
+1 × 3.5mm female audio jack
+
+Jumper wires (for GPIO to breadboard)
+
+Breadboard (or design a PCB if preferred)
+
+# How to Use
+⚠Note: This project is compatible only with the TM4C1294XL MCU.
+
+Clone or download the project.
+
+Open MainCode.c in Keil uVision.
+
+(Optional) You can modify the output frequency by adjusting the values in the GPIO Handler. The formula is commented in the code.
+
+Build and upload the code to the MCU.
+
+Assemble the circuit on a breadboard:
+
+![image](https://github.com/user-attachments/assets/3871d191-b5ab-456a-bae0-855eff9a8801)
+(note: make sure your GPIO and DAC match your own configuration).
+
+Plug in your speakers or headphones to the audio jack.
+
+Press the buttons to play notes — your simple piano is ready! 🎶
+
+# Demo
+Coming soon...
 
 
-#Demo
-- Soon to be uploaded
+# Author
+Made with Love and Head-Scratches for learning purposes.
