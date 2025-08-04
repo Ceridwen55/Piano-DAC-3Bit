@@ -48,7 +48,7 @@ Plug in your speakers or headphones to the audio jack.
 Press the buttons to play notes — your simple piano is ready! 🎶
 
 # Demo
-Coming soon...
+[![Watch the video](https://raw.githubusercontent.com/Ceridwen55/Piano-DAC-3Bit/main/3 Notes DAC Piano (1).mp4)
 
 
 # Author
